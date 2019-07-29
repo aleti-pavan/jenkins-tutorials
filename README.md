@@ -7,7 +7,7 @@ This is for Jenkins part of DevOps Classes
 
       i)      Theory of Jenkins
       ii)     Dependent on Java
-      iii)    Install Jenkins on RedHat8 Linux
+      iii)    Install Jenkins on RedHat8 Linux (AWS EC2 Instance)
       iv)     Access Jenkins via browser
       v)      Tour of Jenkins
       vi)     Create View/Folder
