@@ -24,6 +24,7 @@ This is for Jenkins part of DevOps Classes
       i)      Structure of Jenkins Jobs
       ii)     Freestyle Job creation
       ii)     Adding Parameters to Jobs
+      iii)    Build Environement variables
       iii)    Different types of Jobs
       iv)     greenballs plugin
       vi)     Debugging/troubleshooting Jobs
