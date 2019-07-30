@@ -1,0 +1,88 @@
+pipeline {
+    agent {
+        node {
+            label 'master'
+        }
+    }
+    environment {
+        terraform_version = '0.11.11'
+        access_key = 'input_your_access_key'
+        secret_key = 'input_your_secret_key'
+    }
+    parameters {
+        string(name: 'project_name', defaultValue: 'Terraform Pipeline', description: 'Jenkins Pipeline for terraform?')
+
+          /*  text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+
+              booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+
+              choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+
+              password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+          */
+    }
+    stages {
+        stage('checkout repo') {
+            steps {
+                git branch: "master",
+                //url: 'https://github.com/aleti-pavan/terraform-ec2.git'
+                url: 'https://github.com/aleti-pavan/terraform-tutorials.git'
+            }
+        }
+        stage('Install Terraform') {
+              steps {
+                    sh "sudo yum install wget zip -y"
+                    sh "cd /tmp"
+                    sh "curl -o terraform.zip https://releases.hashicorp.com/terraform/'$terraform_version'/terraform_'$terraform_version'_linux_amd64.zip"
+                    sh "unzip terraform.zip"
+                    sh "sudo mv terraform /usr/bin"
+                    sh "rm -rf terraform.zip"
+                    sh "terraform version"
+              }
+        }
+        stage('terraform init') {
+            steps {
+                sh  """
+                    pwd;ls;
+                    terraform init ./5.with_outputs/
+                    """
+            }
+        }
+        stage('terraform plan') {
+            steps {
+                sh  """
+                    terraform plan -var 'access_key=$access_key' -var 'secret_key=$secret_key' ./5.with_outputs/
+                    ls -l ./5.with_outputs/
+                    """
+                 script {
+                    timeout(time: 10, unit: 'MINUTES') {
+                       input(id: "Deploy Gate", message: "Deploy ${params.project_name}?", ok: 'Deploy')
+                    }
+                }
+            }
+        }
+        stage('terraform apply') {
+            steps {
+                sh  """
+                    terraform apply -var 'access_key=$access_key' -var 'secret_key=$secret_key' -auto-approve ./5.with_outputs/
+                    """
+            }
+        }
+        stage('Want to Destroy Resources??') {
+            steps {
+                script {
+                   timeout(time: 10, unit: 'MINUTES') {
+                      input(id: "Deploy Gate", message: "Want to Destroy ${params.project_name}?", ok: 'Destroy??')
+                   }
+                }
+            }
+        }
+        stage('terraform destroy') {
+            steps {
+                sh  """
+                    terraform destroy -var 'access_key=$access_key' -var 'secret_key=$secret_key' -auto-approve ./5.with_outputs/
+                    """
+            }
+        }
+    }
+}
