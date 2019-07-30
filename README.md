@@ -13,6 +13,7 @@ This is for Jenkins part of DevOps Classes
       vi)     Create View/Folder
 
 `2. Administration of Jenkins`
+
       i)      Plugins and installation of plugins
       ii)     Manage Jenkins
       iii)    Users creation and permissions
@@ -21,6 +22,7 @@ This is for Jenkins part of DevOps Classes
       vi)     Labels and use labels in the pipelines (covered during pipeline topic)
 
 `3. Jobs Creation`
+
       i)      Structure of Jenkins Jobs
       ii)     Freestyle Job creation
       ii)     Adding Parameters to Jobs
@@ -32,10 +34,12 @@ This is for Jenkins part of DevOps Classes
       viii)   Adding Source control to Jobs
 
 `4. Git push/PR to trigger Jobs`
+
       i)      Integrating Git with Jenkins
       iii)    Trigger jobs with Git Push/Pull Request    
 
 `5. Pipeline Jobs and Jenkinsfile`
+
       i)      Installing Pipeline Plugin
       ii)     Types of Pipelines Scripted & Declarative
       iii)    Structure of Pipeline Job
