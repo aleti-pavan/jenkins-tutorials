@@ -1,0 +1,21 @@
+node {
+//scripted pipeline
+    wrap([$class: 'BuildUser']) {
+        username = env.BUILD_USER_ID.split('@')[0]
+    }
+
+    stage('downloading')  {
+        git branch: 'master', credentialsId: 'common-user-private-key', url: '<repo_url>'
+        sh 'echo $pub_key > id_rsa.pub'
+    }
+    ansiblePlaybook(
+        playbook: 'ssh_access.yml',
+        inventory: env.INVENTORY_LIST + ',',
+        credentialsId: 'conman',
+        hostKeyChecking: false,
+        extras: '-e username=' + username
+    )
+    stage('clearout') {
+        deleteDir()
+    }
+}
