@@ -1,6 +1,15 @@
 # jenkins-tutorials
 This is for Jenkins part of DevOps Classes
 
+Before executing Jobs, Manual configuration to be done on the Linux server where jenkins is installed.
+
+By default Jenkins installation creates a user called `jenkins` and all jenkins jobs would be executed with that user, so I have enabled the sudo access to the `jenkins` user by updating `visudo`
+
+        i)    Login to RHEL-8 EC2
+        ii)   sudo visudo -> update the sudoers with entry `jenkins	ALL=(ALL) 	NOPASSWD: ALL`
+        iii)  Now Jenkins Pipelines should be able to function normally without issues
+
+
 #Jenkins_Syllabus
 
 `1. Installation of Jenkins`
