@@ -2,7 +2,7 @@ pipeline {
   agent {
     kubernetes {
       label 'jenkins-pod'
-      yamlFile 'jenkinsPodTemplate.yml'
+      yamlFile 'jenkinsPodTemplate.yaml'
     }
   }
     stages {
