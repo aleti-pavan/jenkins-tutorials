@@ -1,0 +1,22 @@
+pipeline {
+  agent {
+    kubernetes {
+      label 'jenkins-pod'
+      yamlFile 'jenkinsPodTemplate.yml'
+    }
+  }
+    stages {
+        stage('Checkout code and parse Jenkinsfile.json') {
+            steps {
+                  container('jnlp'){
+                        script{
+                          inputFile = readFile('Jenkinsfile.json')
+                          config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
+                          containerTag = env.BRANCH_NAME + '-' + env.GIT_COMMIT.substring(0, 7)
+                          println "pipeline config ==> ${config}"
+                        } // script
+                  } // container('jnlp')
+            } // steps
+        } // stage
+    }
+}
