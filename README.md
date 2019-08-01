@@ -35,9 +35,9 @@ By default Jenkins installation creates a user called `jenkins` and all jenkins 
       i)      Structure of Jenkins Jobs
       ii)     Freestyle Job creation
       ii)     Adding Parameters to Jobs
-      iii)    Build Environement variables
+      iii)    Build Environment variables
       iii)    Different types of Jobs
-      iv)     greenballs plugin
+      iv)     Greenballs plugin
       vi)     Debugging/troubleshooting Jobs
       vii)    Exploring Jobs on Linux Box
       viii)   Adding Source control to Jobs
