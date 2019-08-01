@@ -1,0 +1,10 @@
+node ('node-1') {
+  stage('Source') {
+    git 'https://github.com/aleti-pavan/jenkins-tutorials.git'
+          //https://github.com/aleti-pavan/jenkins-tutorials
+  }
+  stage('Compile') {
+    def gradle_home = tool 'gradle4'
+    sh "'${gradle_home}/bin/gradle' clean compileJava test"
+  }
+}
