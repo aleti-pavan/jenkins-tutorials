@@ -1,0 +1,87 @@
+pipeline {
+    agent any
+    environment {
+        TF_VERSION = '0.12.10'
+    }
+
+    stages {
+        stage('Terraform Plan') {
+            agent {
+                docker {
+                    image 'hashicorp/terraform:$TF_VERSION'
+                }
+            }
+            steps {
+                withCredentials([
+                    azureServicePrincipal(
+                        credentialsId:          '05f1fc5-dc2a-43d8-aa2c-dc151dd44',
+                        subscriptionIdVariable: 'ARM_SUBSCRIPTION_ID',
+                        clientIdVariable:       'ARM_CLIENT_ID',
+                        clientSecretVariable:   'ARM_CLIENT_SECRET',
+                        tenantIdVariable:       'ARM_TENANT_ID'
+                    ),
+                    file(
+                        credentialsId: 'terraformrc',
+                        variable: 'terraformrc',
+                    )
+                ])
+                {
+                    sh 'sh terraform.sh plan'
+                }
+            }
+            post {
+                always {
+                    sh 'terraform --version'
+                }
+            }
+        }
+        stage('Terraform Apply') {
+            agent {
+                docker {
+                    image 'hashicorp/terraform:$TF_VERSION'
+                }
+            }
+            when {
+                branch 'apply'
+            }
+            steps {
+                withCredentials([
+                    azureServicePrincipal(
+                        credentialsId:          '505f1fc5-dc2a-43d8-aa2c-dc151dd44',
+                        subscriptionIdVariable: 'ARM_SUBSCRIPTION_ID',
+                        clientIdVariable:       'ARM_CLIENT_ID',
+                        clientSecretVariable:   'ARM_CLIENT_SECRET',
+                        tenantIdVariable:       'ARM_TENANT_ID'
+                    ),
+                    file(
+                        credentialsId: 'terraformrc',
+                        variable: 'terraformrc',
+                    )
+                ])
+                {
+                    sh 'sh terraform.sh apply'
+                }
+            }
+            post {
+                always {
+                    withCredentials([
+                        azureServicePrincipal(
+                            credentialsId:          '05f1fc5-dc2a-43d8-aa2c-dc151dd44',
+                            subscriptionIdVariable: 'ARM_SUBSCRIPTION_ID',
+                            clientIdVariable:       'ARM_CLIENT_ID',
+                            clientSecretVariable:   'ARM_CLIENT_SECRET',
+                            tenantIdVariable:       'ARM_TENANT_ID'
+                        ),
+                        file(
+                            credentialsId: 'terraformrc',
+                            variable: 'terraformrc',
+                        )
+                    ])
+                    {
+                        sh 'sh terraform.sh destroy'
+                    }
+                }
+            }
+        }
+    }
+}
